@@ -25,20 +25,67 @@ public class QuestionService {
     public PaginationDTO list(Integer currPage, Integer size) {
 
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.count();
-        paginationDTO.setPagination(totalCount, currPage, size);
+        Integer totalPage;
 
-        if (currPage < 1) {
+        Integer totalCount = questionMapper.count();
+
+
+        if (totalCount % size == 0){
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+
+        if (currPage < 1){
             currPage = 1;
         }
 
-        if (currPage > paginationDTO.getTotalPage()) {
-            currPage = paginationDTO.getTotalPage();
+        if (currPage > totalPage){
+            currPage = totalPage;
         }
+
+        paginationDTO.setPagination(totalPage, currPage);
+
 
         // size*(page-1)
         Integer offset = size * (currPage - 1);
         List<Question> questions = questionMapper.list(offset, size);
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        for (Question question : questions) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+        paginationDTO.setQuestions(questionDTOList);
+        return paginationDTO;
+    }
+
+    public PaginationDTO list(Integer userId, Integer currPage, Integer size) {
+
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalPage;
+        Integer totalCount = questionMapper.countByUserId(userId);
+
+        if (totalCount % size == 0){
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+
+        if (currPage < 1){
+            currPage = 1;
+        }
+
+        if (currPage > totalPage){
+            currPage = totalPage;
+        }
+        paginationDTO.setPagination(totalPage, currPage);
+
+        // size*(page-1)
+        Integer offset = size * (currPage - 1);
+        List<Question> questions = questionMapper.listByUserId(userId, offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.findById(question.getCreator());
