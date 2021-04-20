@@ -44,9 +44,10 @@
                 <div class="media" th:each="notification : ${pagination.data}">
                     <div class="media-body">
                         <h4 class="media-heading">
-                            <span th:text="${notification.notifierName + ' ' + notification.type + ' '}"></span>
+                            <span th:text="${notification.notifierName + ' ' + notification.typeName + ' '}"></span>
                             <a th:href="@{'/notification/' + ${notification.id}}"
                                th:text="${notification.outerTitle}"></a>
+                            <span class="label label-danger" th:if="${notification.status == 0}">未读</span>
                         </h4>
                     </div>
                 </div>

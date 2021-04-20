@@ -2,6 +2,7 @@ package life.majiang.community.controller;
 
 import life.majiang.community.dto.NotificationDTO;
 import life.majiang.community.dto.PaginationDTO;
+import life.majiang.community.enums.NotificationTypeEnum;
 import life.majiang.community.model.User;
 import life.majiang.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class NotificationController {
         }
 
         NotificationDTO  notificationDTO = notificationService.read(id, user);
-        return "profile";
+
+        if (NotificationTypeEnum.REPLY_COMMENT.getType() == notificationDTO.getType()
+                || NotificationTypeEnum.REPLY_QUESTION.getType() == notificationDTO.getType()) {
+            return "redirect:/question/" + notificationDTO.getOuterid();
+        } else {
+            return "redirect:/";
+        }
     }
 }
