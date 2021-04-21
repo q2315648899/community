@@ -23,6 +23,8 @@ function comment2target(targetId, type, content) {
             "type": type
         }),
         success: function (response) {
+            // response也是Json对象，JSON.stringify()方法将response转换为json字符串
+            // var ss = JSON.stringify(response);
             if (response.code == 200) {
                 window.location.reload();
             } else {
@@ -66,6 +68,8 @@ function collapseComments(e) {
             e.classList.add("active");
         } else {
             $.getJSON("/comment/" + id, function (data) {
+                // data是Json对象，JSON.stringify()方法将data转换为json字符串
+                // var ss = JSON.stringify(data);
                 // .reverse()调换数组顺序
                 $.each(data.data.reverse(), function (index, comment) {
                     var mediaLeftElement = $("<div/>", {
