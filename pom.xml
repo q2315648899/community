@@ -103,7 +103,7 @@
 				<configuration>
 					<url>jdbc:mysql://10.23.196.202:3306/xinwu</url>
 					<user>root</user>
-					<password>123456</password>
+					<password>AFWXHLUM123</password>
 				</configuration>
 				<dependencies>
                     <dependency>
