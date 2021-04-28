@@ -59,11 +59,11 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-//            user.setGmtCreate(System.currentTimeMillis());
-//            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatar_url());
             userService.createOrUpdate(user);
-            response.addCookie(new Cookie("token", token));
+            Cookie cookie = new Cookie("token", token);
+            cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
+            response.addCookie(cookie);
             // 登录成功，写 session和cookie
 //            request.getSession().setAttribute("user", githubUser);
             return "redirect:/";
@@ -80,7 +80,6 @@ public class AuthorizeController {
         request.getSession().removeAttribute("user");
         Cookie newCookie = new Cookie("token", null);
         newCookie.setMaxAge(0);
-        newCookie.setPath("/");
         response.addCookie(newCookie);
         return "redirect:/";
     }
