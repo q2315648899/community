@@ -12,7 +12,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode{
     READ_NOTIFICATION_FAIL(2008, "想读取别人的信息？你这是在玩火啊！"),
     NOTIFICATION_NOT_FOUND(2009, "消息找不到啦！"),
     FILE_UPLOAD_FAIL(2010, "文件上传失败！"),
-    INVALID_INPUT(2011, "非法输入");
+    INVALID_INPUT(2011, "非法输入"),
+    INVALID_OPERATION(2012, "朋友，是不是走错房间了？");
 
     private String message;
     private Integer code;
