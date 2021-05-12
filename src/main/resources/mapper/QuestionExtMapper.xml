@@ -29,7 +29,15 @@
     </update>
 
     <select id="selectRelated" parameterType="life.majiang.community.model.Question" resultMap="BaseResultMap">
-        select * from QUESTION where ID != #{id} AND TAG regexp #{tag}
+        select * from QUESTION
+        <where>
+            <if test="id != null">
+                and ID != #{id}
+            </if>
+            <if test="tag != null and tag != ''">
+                and TAG regexp #{tag}
+            </if>
+        </where>
     </select>
 
     <select id="countBySearch" parameterType="life.majiang.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
