@@ -43,9 +43,19 @@ public class TagCache {
     public static String filterInValid(String tags) {
         String[] split = StringUtils.split(tags, ",");
         List<TagDTO> tagDTOS = get();
+        String inValid = "";
+        if (split == null || split.length == 0) {
+            inValid = "标签不能为空";
+            return inValid;
+        } else if (split.length == 1) {
+            if (StringUtils.isBlank(split[0])) {
+                inValid = "标签不能为空";
+                return inValid;
+            }
+        }
 
         List<String> tagList = tagDTOS.stream().flatMap(tag -> tag.getTags().stream()).collect(Collectors.toList());
-        String inValid = Arrays.stream(split).filter(t -> !tagList.contains(t)).collect(Collectors.joining(","));
+        inValid = Arrays.stream(split).filter(t -> !tagList.contains(t)).collect(Collectors.joining(","));
         return inValid;
     }
 }
