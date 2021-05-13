@@ -50,6 +50,12 @@
             <if test="tag != null and tag != ''">
               AND TAG regexp #{tag}
             </if>
+            <if test="sort != null and sort != '' and sort == 'no'">
+              AND COMMENT_COUNT = 0
+            </if>
+            <if test="time != null and time != ''">
+              AND GMT_CREATE > #{time}
+            </if>
         </where>
     </select>
 
@@ -60,9 +66,24 @@
               AND TITLE regexp #{search}
             </if>
             <if test="tag != null and tag != ''">
-                AND TAG regexp #{tag}
+              AND TAG regexp #{tag}
+            </if>
+            <if test="sort != null and sort != '' and sort == 'no'">
+              AND COMMENT_COUNT = 0
+            </if>
+            <if test="time != null and time != ''">
+              AND GMT_CREATE > #{time}
             </if>
         </where>
-        order by gmt_create desc limit #{offset},#{size}
+        <if test="sort == null or sort == ''">
+            order by GMT_CREATE desc
+        </if>
+        <if test="sort != null and sort != '' and (sort == 'no' || sort == 'new')">
+            order by GMT_CREATE desc
+        </if>
+        <if test="sort != null and sort != '' and (sort == 'hot' || sort == 'hot7' || sort == 'hot30')">
+            order by COMMENT_COUNT desc
+        </if>
+        limit #{offset},#{size}
     </select>
 </mapper>
