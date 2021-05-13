@@ -37,7 +37,12 @@ public class QuestionService {
 
         if (StringUtils.isNotBlank(search)) {
             String[] tags = StringUtils.split(search, " ");
-            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+            search = Arrays
+                    .stream(tags)
+                    .filter(StringUtils::isNotBlank)
+                    .map(t -> t.replace("+", "").replace("*", ""))
+                    .filter(StringUtils::isNotBlank)
+                    .collect(Collectors.joining("|"));
         }
 
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
@@ -45,7 +50,10 @@ public class QuestionService {
 
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         questionQueryDTO.setSearch(search);
-        questionQueryDTO.setTag(tag);
+        if(StringUtils.isNotBlank(tag)){
+            tag = tag.replace("+", "").replace("*", "");
+            questionQueryDTO.setTag(tag);
+        }
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
 
 
