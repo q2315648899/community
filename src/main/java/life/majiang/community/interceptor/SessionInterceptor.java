@@ -3,7 +3,7 @@ package life.majiang.community.interceptor;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.model.UserExample;
-import life.majiang.community.service.NavService;
+import life.majiang.community.service.AdService;
 import life.majiang.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     private NotificationService notificationService;
 
     @Autowired
-    private NavService navService;
+    private AdService adService;
 
     @Value("${github.redirect.uri}")
     private String redirectUri;
@@ -39,8 +39,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         // 每个web工程都只有一个ServletContext对象。 说白了也就是不管在哪个servlet里面，获取到的这个类的对象都是同一个。
         request.getServletContext().setAttribute("redirectUri", redirectUri);
         // 没有登录的时候也可以查看导航
-        HttpSession session = request.getSession();
-        session.setAttribute("navs", navService.list());
+        request.getServletContext().setAttribute("ads", adService.list());
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
             for (Cookie cookie : cookies) {
@@ -50,6 +49,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                     userExample.createCriteria().andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0){
+                        HttpSession session = request.getSession();
                         session.setAttribute("user", users.get(0));
                         Long unreadCount = notificationService.unreadCount(users.get(0).getId());
                         session.setAttribute("unreadCount", unreadCount);
