@@ -195,7 +195,12 @@ public class QuestionService {
         }
 
         String[] tags = StringUtils.split(queryDTO.getTag(), ",");
-        String regexTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        String regexTag = Arrays
+                .stream(tags)
+                .filter(StringUtils::isNotBlank)
+                .map(t -> t.replace("+", "").replace("*", ""))
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.joining("|"));
         Question question = new Question();
         question.setId(queryDTO.getId());
         question.setTag(regexTag);
