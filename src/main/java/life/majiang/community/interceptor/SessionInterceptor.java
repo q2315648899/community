@@ -38,6 +38,9 @@ public class SessionInterceptor implements HandlerInterceptor {
         // Servlet 上下文
         // 每个web工程都只有一个ServletContext对象。 说白了也就是不管在哪个servlet里面，获取到的这个类的对象都是同一个。
         request.getServletContext().setAttribute("redirectUri", redirectUri);
+        // 没有登录的时候也可以查看导航
+        HttpSession session = request.getSession();
+        session.setAttribute("navs", navService.list());
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
             for (Cookie cookie : cookies) {
@@ -47,11 +50,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                     userExample.createCriteria().andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0){
-                        HttpSession session = request.getSession();
                         session.setAttribute("user", users.get(0));
                         Long unreadCount = notificationService.unreadCount(users.get(0).getId());
                         session.setAttribute("unreadCount", unreadCount);
-                        session.setAttribute("navs", navService.list());
                     }
                     break;
                 }
