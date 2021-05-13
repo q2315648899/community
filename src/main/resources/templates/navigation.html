@@ -24,6 +24,20 @@
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
+                <ul class="nav navbar-nav">
+                    <script>
+                        function clickNav(label) {
+                            gtag('event', 'click', {
+                                'event_category': 'LINK',
+                                'event_label': label,
+                                'transport_type': 'NAV'
+                            })
+                        }
+                    </script>
+                    <li th:each="nav : ${session.navs}">
+                        <a th:href="${nav.url}" th:text="${nav.title}" th:onclick="clickNav([[${nav.title}]])" target="_blank"></a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${session.user != null}">
                         <a href="/publish">提问</a>
