@@ -10,11 +10,20 @@
         <!--<h4>打赏请扫码</h4>-->
         <!--<img class="img-thumbnail question-wechat" src="/images/WeChat.png">-->
     <!--</div>-->
-    <!--极客时间-->
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 side">
-        <a href="http://gk.link/a/103Vl" target="_blank"
-           onclick="gtag('event', 'click', {'event_category': 'LINK','event_label': 'GEEKTIME','transport_type': 'SIDE'})">
-            <img class="img-thumbnail question-wechat" src="/images/geektime.png">
+    <script>
+        function clickSide(label) {
+            gtag('event', 'click', {
+                'event_category': 'LINK',
+                'event_label': label,
+                'transport_type': 'SIDE'
+            })
+        }
+    </script>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 side"
+         th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('SIDE')}">
+        <a th:href="${ad.url}" th:onclick="clickSide([[${ad.title}]])"
+           target="_blank">
+            <img class="img-thumbnail question-wechat" th:src="${ad.image}">
         </a>
     </div>
 </div>

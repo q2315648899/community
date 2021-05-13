@@ -1,5 +1,6 @@
 package life.majiang.community.interceptor;
 
+import life.majiang.community.enums.AdPosEnum;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.model.UserExample;
@@ -39,7 +40,9 @@ public class SessionInterceptor implements HandlerInterceptor {
         // 每个web工程都只有一个ServletContext对象。 说白了也就是不管在哪个servlet里面，获取到的这个类的对象都是同一个。
         request.getServletContext().setAttribute("redirectUri", redirectUri);
         // 没有登录的时候也可以查看导航
-        request.getServletContext().setAttribute("ads", adService.list());
+        for (AdPosEnum adPos : AdPosEnum.values()) {
+            request.getServletContext().setAttribute(adPos.name(), adService.list(adPos.name()));
+        }
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
             for (Cookie cookie : cookies) {
