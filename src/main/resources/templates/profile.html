@@ -56,11 +56,13 @@
                             </a>
                         </li>
                         <li th:if="${pagination.showPrevious}">
-                            <a th:href="@{'/profile/'+${section}(page=${pagination.currPage - 1})}" aria-label="Previous">
+                            <a th:href="@{'/profile/'+${section}(page=${pagination.currPage - 1})}"
+                               aria-label="Previous">
                                 <span aria-hidden="true">&lt;</span>
                             </a>
                         </li>
-                        <li th:each="page : ${pagination.pages}" th:class="${pagination.currPage == page}? 'active' : ''">
+                        <li th:each="page : ${pagination.pages}"
+                            th:class="${pagination.currPage == page}? 'active' : ''">
                             <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}">
 
                             </a>
@@ -93,6 +95,7 @@
             </div>
         </div>
     </div>
-    <div th:insert="~{footer :: foot}"></div>
+</div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>
